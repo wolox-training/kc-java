@@ -17,13 +17,13 @@ public class User {
     private Long id;
 
     @NotNull
-    private String userName;
+    private String username;
 
     @NotNull
     private String name;
 
     @NotNull
-    private LocalDate birthDate;
+    private LocalDate birthdate;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "booksUsers",
@@ -44,12 +44,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getName() {
@@ -60,12 +60,12 @@ public class User {
         this.name = name;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
+    public LocalDate getBirthdate() {
+        return birthdate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
     }
 
     public List<Book> getBooks() {
