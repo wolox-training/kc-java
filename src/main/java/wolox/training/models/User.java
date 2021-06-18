@@ -3,6 +3,7 @@ package wolox.training.models;
 
 import com.google.common.base.Preconditions;
 import com.sun.istack.NotNull;
+import io.swagger.annotations.ApiModel;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Entity()
+@ApiModel(description = "Users from the OpenApi")
 @Table(name = "users")
 public class User {
 
