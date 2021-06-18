@@ -1,5 +1,8 @@
 package wolox.training.controllers;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +49,13 @@ public class UserController {
      * @return {@link User} by id
      */
     @GetMapping("/{id}")
+    @ApiOperation(value = "Giving an id, return the user", response = User.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Succesfully retrived user"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing th resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })
     public User findOne(@PathVariable Long id) {
         return userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
