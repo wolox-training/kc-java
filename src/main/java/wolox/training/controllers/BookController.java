@@ -26,24 +26,24 @@ public class BookController {
     }
 
     /**
-     * This method return one {@link Book} for author name
+     * This method return one {@link Book} by its author name
      *
      * @param authorTitle: author name
      * @return {@link Book} by author
      */
-    @GetMapping("/author/{author}")
+    @GetMapping("/{author}")
     public Book findByAuthor(@PathVariable String authorTitle) {
         return bookRepository.findByAuthor(authorTitle);
     }
 
     /**
-     * This method return one {@link Book} for id
+     * This method return one {@link Book} by its id
      *
      * @param id: record in database
      * @return {@link Book} by id
      */
     @GetMapping("/{id}")
-    public Book findOne(@PathVariable Integer id) {
+    public Book findOne(@PathVariable Long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
     }
@@ -61,12 +61,12 @@ public class BookController {
     }
 
     /**
-     * This method deletes an book for id record
+     * This method deletes an book by its id
      *
      * @param id: book id by delete
      */
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Long id) {
         bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
         bookRepository.deleteById(id);
@@ -80,7 +80,7 @@ public class BookController {
      * @return book update
      */
     @PutMapping("/{id}")
-    public Book updateBook(@RequestBody Book book, @PathVariable Integer id) {
+    public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
         if (book.getId() != id) {
             throw new BookIdMismatchException();
         }
