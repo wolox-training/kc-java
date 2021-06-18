@@ -1,6 +1,7 @@
 package wolox.training.models;
 
 
+import com.google.common.base.Preconditions;
 import com.sun.istack.NotNull;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 
@@ -49,6 +50,7 @@ public class User {
     }
 
     public void setUsername(String username) {
+        Preconditions.checkNotNull(username);
         this.username = username;
     }
 
@@ -57,6 +59,7 @@ public class User {
     }
 
     public void setName(String name) {
+        Preconditions.checkNotNull(name);
         this.name = name;
     }
 
@@ -65,6 +68,7 @@ public class User {
     }
 
     public void setBirthdate(LocalDate birthdate) {
+        Preconditions.checkNotNull(birthdate);
         this.birthdate = birthdate;
     }
 
