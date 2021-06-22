@@ -1,6 +1,9 @@
 package wolox.training.models;
 
 
+import com.google.common.base.Preconditions;
+import com.sun.istack.NotNull;
+
 import javax.persistence.Id;
 
 import javax.persistence.*;
@@ -10,43 +13,43 @@ import javax.persistence.*;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     @Column(nullable = true)
     private String genre;
 
-    @Column(nullable = false)
+    @NotNull
     private String author;
 
-    @Column(nullable = false)
+    @NotNull
     private String image;
 
-    @Column(nullable = false)
+    @NotNull
     private String title;
 
-    @Column(nullable = false)
+    @NotNull
     private String subtitle;
 
-    @Column(nullable = false)
+    @NotNull
     private String publisher;
 
-    @Column(nullable = false)
+    @NotNull
     private String year;
 
-    @Column(nullable = false)
+    @NotNull
     private Integer pages;
 
-    @Column(nullable = false)
+    @NotNull
     private String isbn;
 
     public Book(){ }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -55,6 +58,7 @@ public class Book {
     }
 
     public void setGenre(String genre) {
+        Preconditions.checkNotNull(genre);
         this.genre = genre;
     }
 
@@ -63,6 +67,7 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+        Preconditions.checkNotNull(author);
         this.author = author;
     }
 
@@ -71,6 +76,7 @@ public class Book {
     }
 
     public void setImage(String image) {
+        Preconditions.checkNotNull(image);
         this.image = image;
     }
 
@@ -79,6 +85,7 @@ public class Book {
     }
 
     public void setTitle(String title) {
+        Preconditions.checkNotNull(title);
         this.title = title;
     }
 
@@ -87,6 +94,7 @@ public class Book {
     }
 
     public void setSubtitle(String subtitle) {
+        Preconditions.checkNotNull(subtitle);
         this.subtitle = subtitle;
     }
 
@@ -95,6 +103,7 @@ public class Book {
     }
 
     public void setPublisher(String publisher) {
+        Preconditions.checkNotNull(publisher);
         this.publisher = publisher;
     }
 
@@ -103,6 +112,7 @@ public class Book {
     }
 
     public void setYear(String year) {
+        Preconditions.checkNotNull(year);
         this.year = year;
     }
 
@@ -111,6 +121,7 @@ public class Book {
     }
 
     public void setPages(Integer pages) {
+        Preconditions.checkNotNull(pages);
         this.pages = pages;
     }
 
@@ -119,6 +130,7 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
+        Preconditions.checkNotNull(isbn);
         this.isbn = isbn;
     }
 }
