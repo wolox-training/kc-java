@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.FORBIDDEN)
 public class BookNotFoundException extends RuntimeException{
 
-    public BookNotFoundException(Integer id) {
+    public BookNotFoundException(Long id) {
         super("Book not found with id:" + id);
     }
 
