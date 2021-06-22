@@ -36,7 +36,11 @@ public class UserController {
      */
     @GetMapping("/{username}")
     public User findByUsername(@PathVariable String username) {
-        return userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
+        if (user == null){
+            throw new UserNotFoundException();
+        }
+        return user;
     }
 
     /**
@@ -101,8 +105,7 @@ public class UserController {
      */
     @PutMapping("/{id}/books")
     @ResponseStatus(HttpStatus.CREATED)
-    public User addBook(@PathVariable Long id, @RequestBody Book book)
-            throws UserNotFoundException {
+    public User addBook(@PathVariable Long id, @RequestBody Book book) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         user.addBook(book);
         return userRepository.save(user);
@@ -116,8 +119,7 @@ public class UserController {
      * @return user with to deleted book
      */
     @DeleteMapping("/{id}/books")
-    public User deleteBook(@PathVariable Long id, @RequestBody Book book)
-            throws UserNotFoundException {
+    public User deleteBook(@PathVariable Long id, @RequestBody Book book) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         user.removeBook(book);
         return userRepository.save(user);
