@@ -3,8 +3,10 @@ package wolox.training.controllers;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import wolox.training.exceptions.BookIdMismatchException;
 import wolox.training.exceptions.BookNotFoundException;
@@ -32,23 +34,12 @@ public class UserController {
     }
 
     /**
-     * This method return one {@link User} by its username
-     *
-     * @param username: username
-     * @return {@link User} by username
-     */
-    @GetMapping("/{username}")
-    public User findByUsername(@PathVariable String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    /**
      * This method return one {@link User} by its id
      *
-     * @param id: record in database
+     * @param param: record in database or a username
      * @return {@link User} by id
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{param}")
     @ApiOperation(value = "Giving an id, return the user", response = User.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Succesfully retrived user"),
@@ -56,9 +47,14 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing th resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public User findOne(@PathVariable Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+    public User findByUser(@PathVariable("param") String param) {
+        if(NumberUtils.isNumber(param)){
+            return userRepository.findById(Long.parseLong(param))
+                    .orElseThrow(UserNotFoundException::new);
+        }else {
+            return userRepository.findByUsername(param);
+        }
+
     }
 
     /**
