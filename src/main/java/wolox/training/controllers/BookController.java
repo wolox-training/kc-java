@@ -1,5 +1,6 @@
 package wolox.training.controllers;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,24 +29,17 @@ public class BookController {
     /**
      * This method return one {@link Book} for author name
      *
-     * @param authorTitle: author name
+     * @param param: author name or record in database
      * @return {@link Book} by author
      */
-    @GetMapping("/author/{author}")
-    public Book findByAuthor(@PathVariable String authorTitle) {
-        return bookRepository.findByAuthor(authorTitle);
-    }
-
-    /**
-     * This method return one {@link Book} for id
-     *
-     * @param id: record in database
-     * @return {@link Book} by id
-     */
-    @GetMapping("/{id}")
-    public Book findOne(@PathVariable Integer id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new BookNotFoundException(id));
+    @GetMapping("/{param}")
+    public Book findByParam(@PathVariable String param) {
+        if(NumberUtils.isNumber(param)){
+            return bookRepository.findById(Long.parseLong(param))
+                    .orElseThrow(() -> new BookNotFoundException(Long.parseLong(param)));
+        }else{
+            return bookRepository.findByAuthor(param);
+        }
     }
 
     /**
@@ -66,7 +60,7 @@ public class BookController {
      * @param id: book id by delete
      */
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable Long id) {
         bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
         bookRepository.deleteById(id);
@@ -80,7 +74,7 @@ public class BookController {
      * @return book update
      */
     @PutMapping("/{id}")
-    public Book updateBook(@RequestBody Book book, @PathVariable Integer id) {
+    public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
         if (book.getId() != id) {
             throw new BookIdMismatchException();
         }
