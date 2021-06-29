@@ -110,4 +110,11 @@ public class BookControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void whenFindABookByIsbn_thenReturnTheBook() throws Exception {
+        Mockito.when(mockBookRepository.findByIsbn("ABCD1234")).thenReturn(ofNullable(bookTest));
+        mvc.perform(get("/api/books/search?isbn=ABCD1234").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
 }

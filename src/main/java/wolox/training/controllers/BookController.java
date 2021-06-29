@@ -2,12 +2,18 @@ package wolox.training.controllers;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wolox.training.exceptions.BookIdMismatchException;
 import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
+import wolox.training.services.OpenLibraryService;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
@@ -15,6 +21,11 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
+
+
+    @Qualifier(value = "OpenLibraryService")
+    private OpenLibraryService openLibraryService;
+
 
     /**
      * This method return all books registers
@@ -81,6 +92,18 @@ public class BookController {
         bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
         return bookRepository.save(book);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Book> search(@RequestParam(name = "isbn", required = false) String isbn)
+            throws IOException {
+        Optional<Book> optionalBook = bookRepository.findByIsbn(isbn);
+        if (optionalBook.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(optionalBook.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    openLibraryService.findByIsbn(isbn).orElseThrow(() -> new BookNotFoundException(isbn)));
+        }
     }
 
 }
