@@ -1,12 +1,13 @@
 package wolox.training.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import wolox.training.models.Book;
+
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("SELECT b FROM Book b WHERE LOWER(b.author) = LOWER(:author)")
-    Book findByAuthor(@Param("author") String author);
+    Book findByAuthor(String author);
+
+    Optional<Book> findByIsbn(String isbn);
 }

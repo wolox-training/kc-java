@@ -10,7 +10,7 @@ public class BookNotFoundException extends RuntimeException{
         super("Book not found with id:" + id);
     }
 
-    public BookNotFoundException(String author) {
-        super("Book not found with author:" + author);
+    public BookNotFoundException(String isbn) {
+        super("Book not found with isbn:" + isbn);
     }
 }
