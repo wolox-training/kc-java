@@ -28,6 +28,9 @@ public class User {
     @NotNull
     private LocalDate birthdate;
 
+    @NotNull
+    private String password;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "booksUsers",
             joinColumns = @JoinColumn(name = "bookId", referencedColumnName = "id"),
@@ -72,6 +75,15 @@ public class User {
     public void setBirthdate(LocalDate birthdate) {
         Preconditions.checkNotNull(birthdate);
         this.birthdate = birthdate;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        Preconditions.checkNotNull(password);
+        this.password = password;
     }
 
     public List<Book> getBooks() {
