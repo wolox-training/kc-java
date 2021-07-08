@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import wolox.training.models.User;
 import wolox.training.repositories.UserRepository;
 
 import java.security.Principal;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/users")
@@ -135,6 +138,16 @@ public class UserController {
     @ResponseBody
     public String currentUserName(Principal principal) {
         return principal.getName();
+    }
+
+    @GetMapping("/birthdateAndName")
+    public Iterable<User> findByBirthdateBetweenAndName(@RequestParam(name = "start", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start,
+                                                                            @RequestParam(name = "end", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+                                                                            @RequestParam(name = "name", required = false) String name) {
+        if (name != null) {
+            name = name.toLowerCase();
+        }
+        return userRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(start, end, name);
     }
 
 }
