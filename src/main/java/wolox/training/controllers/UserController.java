@@ -16,6 +16,8 @@ import wolox.training.models.Book;
 import wolox.training.models.User;
 import wolox.training.repositories.UserRepository;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -127,6 +129,12 @@ public class UserController {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         user.removeBook(book);
         return userRepository.save(user);
+    }
+
+    @RequestMapping(value = "/username", method = RequestMethod.GET)
+    @ResponseBody
+    public String currentUserName(Principal principal) {
+        return principal.getName();
     }
 
 }
