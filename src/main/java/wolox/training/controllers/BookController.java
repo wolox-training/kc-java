@@ -3,6 +3,7 @@ package wolox.training.controllers;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,14 @@ public class BookController {
      * @return all books
      */
     @GetMapping
-    public Iterable findAll() {
-        return bookRepository.findAll();
+    public Optional<Book> findAll(@RequestParam(required = false) String author,
+                              @RequestParam(required = false) String title,
+                              @RequestParam(required = false) String subtitle,
+                              @RequestParam(required = false) String publisher,
+                              @RequestParam(required = false) String genre,
+                              @RequestParam(required = false) String year,
+                                  @RequestParam(required = false) String isbn) {
+        return bookRepository.findAll(author, publisher, genre, year, title, subtitle, isbn);
     }
 
     /**
@@ -112,5 +119,6 @@ public class BookController {
                                                          @RequestParam(name="year", required = false) String year) {
         return bookRepository.findByPublisherAndGenreAndYear(publisher, genre, year);
     }
+
 
 }

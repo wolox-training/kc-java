@@ -20,6 +20,7 @@ import wolox.training.repositories.UserRepository;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,8 +35,9 @@ public class UserController {
      * @return all users
      */
     @GetMapping
-    public Iterable findAll() {
-        return userRepository.findAll();
+    public Optional<User> findAll(@RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start, @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+                                  @RequestParam(required = false, defaultValue = "") String name, @RequestParam(required = false, defaultValue = "") String username) {
+        return userRepository.findAll(start, end, name, username);
     }
 
     /**
