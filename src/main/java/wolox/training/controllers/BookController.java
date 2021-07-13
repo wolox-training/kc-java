@@ -4,6 +4,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,14 +36,15 @@ public class BookController {
      * @return all books
      */
     @GetMapping
-    public Optional<Book> findAll(@RequestParam(required = false) String author,
+    public Page<Book> findAll(@RequestParam(required = false) String author,
                               @RequestParam(required = false) String title,
                               @RequestParam(required = false) String subtitle,
                               @RequestParam(required = false) String publisher,
                               @RequestParam(required = false) String genre,
                               @RequestParam(required = false) String year,
-                                  @RequestParam(required = false) String isbn) {
-        return bookRepository.findAll(author, publisher, genre, year, title, subtitle, isbn);
+                              @RequestParam(required = false) String isbn,
+                              @PageableDefault(sort = { "title", "subtitle", "isbn" }, value = 20) Pageable pageable) {
+        return bookRepository.findAll(author, publisher, genre, year, title, subtitle, isbn, pageable);
     }
 
     /**
@@ -114,10 +117,11 @@ public class BookController {
     }
 
     @GetMapping("/publisherAndGenreAndYear")
-    public Iterable<Book> findByPublisherAndGenreAndYear(@RequestParam(name= "publisher", required = false) String publisher,
-                                                         @RequestParam(name="genre", required=false) String genre,
-                                                         @RequestParam(name="year", required = false) String year) {
-        return bookRepository.findByPublisherAndGenreAndYear(publisher, genre, year);
+    public Page<Book> findByPublisherAndGenreAndYear(@RequestParam(name= "publisher", required = false) String publisher,
+                                                     @RequestParam(name="genre", required=false) String genre,
+                                                     @RequestParam(name="year", required = false) String year,
+                                                     @PageableDefault(sort = { "title", "subtitle", "isbn" }, value = 20) Pageable pageable) {
+        return bookRepository.findByPublisherAndGenreAndYear(publisher, genre, year, pageable);
     }
 
 
