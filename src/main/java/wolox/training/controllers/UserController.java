@@ -5,13 +5,13 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import wolox.training.exceptions.BookIdMismatchException;
-import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.UserIdDontMatchException;
 import wolox.training.exceptions.UserNotFoundException;
 import wolox.training.models.Book;
@@ -20,7 +20,6 @@ import wolox.training.repositories.UserRepository;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -35,9 +34,9 @@ public class UserController {
      * @return all users
      */
     @GetMapping
-    public Optional<User> findAll(@RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start, @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
-                                  @RequestParam(required = false, defaultValue = "") String name, @RequestParam(required = false, defaultValue = "") String username) {
-        return userRepository.findAll(start, end, name, username);
+    public Page<User> findAll(@RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start, @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+                              @RequestParam(required = false, defaultValue = "") String name, @RequestParam(required = false, defaultValue = "") String username,  @PageableDefault(sort = { "username" , "name" }, value = 20) Pageable pageable) {
+        return userRepository.findAll(start, end, name, username, pageable);
     }
 
     /**
@@ -143,13 +142,13 @@ public class UserController {
     }
 
     @GetMapping("/birthdateAndName")
-    public Iterable<User> findByBirthdateBetweenAndName(@RequestParam(name = "start", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start,
+    public Page<User> findByBirthdateBetweenAndName(@RequestParam(name = "start", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start,
                                                                             @RequestParam(name = "end", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
-                                                                            @RequestParam(name = "name", required = false) String name) {
+                                                                            @RequestParam(name = "name", required = false) String name,  @PageableDefault(sort = { "username" , "name" }, value = 20) Pageable pageable) {
         if (name != null) {
             name = name.toLowerCase();
         }
-        return userRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(start, end, name);
+        return userRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(start, end, name, pageable);
     }
 
 }
