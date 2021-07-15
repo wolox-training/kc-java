@@ -1,6 +1,7 @@
-package wolox.training.services;
+package wolox.training.security;
 
 import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,8 +11,9 @@ import org.springframework.stereotype.Component;
 import wolox.training.models.User;
 import wolox.training.repositories.UserRepository;
 
-@Component("UserAuthenticationProvider")
-public class UserAuthenticationProvider implements AuthenticationProvider {
+@Component
+public class CustomAuthenticationProvider implements AuthenticationProvider {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -36,3 +38,4 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }
+
